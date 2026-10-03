@@ -7,8 +7,18 @@ import { DataDialog } from "./components/DataDialog";
 import type { Applied } from "./components/Disruptions";
 import { Hero } from "./components/Hero";
 import { Methods } from "./components/Methods";
-import { Proof } from "./components/Proof";
+import { Model } from "./components/Model";
+import { Bound } from "./components/Bound";
+import { Playground } from "./components/Playground";
+import { Repair } from "./components/Repair";
+import { Polish } from "./components/Polish";
+import { Rooms } from "./components/Rooms";
+import { Verification } from "./components/Verification";
+import { Complexity } from "./components/Complexity";
+import { Incremental } from "./components/Incremental";
 import { Timetable } from "./components/Timetable";
+import { Technical } from "./components/Technical";
+import { tracePipeline } from "./engine/trace";
 import { useReducedMotion } from "./lib/hooks";
 import { solveInWorker, solveNow, type Solution } from "./lib/solution";
 
@@ -47,6 +57,8 @@ export default function App() {
   }, [theme]);
 
   const current = history.length ? history[history.length - 1].result.schedule : sol.after;
+  // DSatur, repair and polish as the engine runs them, with every step recorded
+  const trace = useMemo(() => tracePipeline(sol.pb), [sol]);
 
   const apply = useCallback(
     (d: Disruption) => {
@@ -82,16 +94,21 @@ export default function App() {
 
   return (
     <>
-      <a className="skip" href="#main">Skip to the demo</a>
+      <a className="skip" href="#main">Skip to the content</a>
       <header className="top">
         <div className="wrap top-inner">
           <a className="logo" href="#main" aria-label="LOWERBOUND, home">
             <span className="logo-br" aria-hidden>⌈</span>LOWERBOUND<span className="logo-br" aria-hidden>⌉</span>
           </a>
           <nav className="nav" aria-label="Sections">
-            <a href="#proof">Proof</a>
-            <a href="#method">Method</a>
+            <a href="#model">Model</a>
+            <a href="#bound">Bound</a>
             <a href="#graph">Graph</a>
+            <a href="#dsatur">DSatur</a>
+            <a href="#method">Methods</a>
+            <a href="#repair">Repair</a>
+            <a href="#verify">Proof</a>
+            <a href="#complexity">Complexity</a>
             <a href="#timetable">Timetable</a>
           </nav>
           <div className="top-actions">
@@ -114,11 +131,20 @@ export default function App() {
       </header>
 
       <main id="main" className="wrap">
-        <Hero sol={sol} history={history} reduced={reduced} onApply={apply} onUndo={undo} onClear={clear} />
-        <Proof sol={sol} current={current} />
-        <Methods sol={sol} />
+        <Hero sol={sol} reduced={reduced} />
+        <Model sol={sol} />
+        <Bound sol={sol} />
         <ConflictGraph sol={sol} />
+        <Playground sol={sol} trace={trace} />
+        <Methods sol={sol} />
+        <Repair sol={sol} trace={trace} />
+        <Polish sol={sol} trace={trace} />
+        <Rooms sol={sol} />
+        <Verification sol={sol} />
+        <Complexity sol={sol} />
+        <Incremental sol={sol} history={history} reduced={reduced} onApply={apply} onUndo={undo} onClear={clear} />
         <Timetable sol={sol} current={current} disruptions={history.map((h) => h.d)} moved={latestMoves} />
+        <Technical sol={sol} />
       </main>
 
       <footer className="foot wrap">

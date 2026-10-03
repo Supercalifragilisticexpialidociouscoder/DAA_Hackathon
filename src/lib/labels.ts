@@ -17,6 +17,32 @@ export const plural = (n: number, one: string, many = one + "s") => `${fmt(n)} $
 
 /* Subject short codes, the way they're written on a college timetable. */
 const KNOWN: Record<string, string> = {
+  // this semester's subjects (the sample)
+  "probability and statistics": "P&S",
+  "digital electronics": "DE",
+  "design and analysis of algorithms": "DAA",
+  "backend web development": "BWD",
+  "advanced communication skills": "ACS",
+  "logical reasoning and analytical skills": "LRAS",
+  "electronic circuit analysis": "ECA",
+  "analog and digital communications": "ADC",
+  "linear and digital ic applications": "LDICA",
+  "electromagnetic fields and waves": "EMFW",
+  "signals and systems": "S&S",
+  "probability theory and stochastic processes": "PTSP",
+  "sensors and actuators": "S&A",
+  "embedded systems": "ES",
+  "introduction to robotics": "ITR",
+  "artificial intelligence fundamentals": "AIF",
+  "wireless sensor networks": "WSN",
+  "control systems for robotics": "CSR",
+  "financial management": "FM",
+  "marketing management": "MM",
+  "human resource management": "HRM",
+  "organisational behaviour": "OB",
+  "business statistics": "BS",
+  "business communication": "BC",
+  // other common subjects, for pasted or random data
   "design & analysis of algorithms": "DAA",
   "operating systems": "OS",
   "computer networks": "CN",

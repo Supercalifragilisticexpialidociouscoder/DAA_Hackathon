@@ -4,6 +4,7 @@ import type { Schedule } from "../engine/types";
 import { copyText, useFlash } from "../lib/hooks";
 import { dayLong, dayShort, plural, roomName, shortName, slotLabel } from "../lib/labels";
 import type { Solution } from "../lib/solution";
+import { Section } from "./Section";
 
 type View = "section" | "teacher" | "room";
 
@@ -59,12 +60,12 @@ export function Timetable({ sol, current, disruptions, moved }: {
   const blockedWord = view === "section" ? "away" : view === "teacher" ? "out" : "closed";
 
   return (
-    <section className="section" id="timetable" aria-labelledby="tt-title">
-      <h2 id="tt-title">The timetable</h2>
-      <p className="section-lede">
-        The minimized week{disruptions.length ? ", with this week's disruptions applied" : ""}. Pick a section, a teacher or a
-        room.
-      </p>
+    <Section
+      id="timetable"
+      step={12}
+      title="The final timetable"
+      lede={<>The result of everything above{disruptions.length ? ", with this week's disruptions applied" : ""}. Pick a section, a teacher or a room.</>}
+    >
       <div className="tt-bar">
         <div className="seg" role="tablist" aria-label="View by">
           {(
@@ -141,6 +142,6 @@ export function Timetable({ sol, current, disruptions, moved }: {
           </tbody>
         </table>
       </div>
-    </section>
+    </Section>
   );
 }

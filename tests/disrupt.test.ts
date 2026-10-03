@@ -36,7 +36,7 @@ function checkResult(pb: Problem, base: Schedule, list: Disruption[], r: Resched
 describe("disruptions on the sample", () => {
   const { pb, base } = solved();
 
-  it("every teacher out on every day: no clashes, rooms stay at 7", () => {
+  it("every teacher out on every day: no clashes, rooms stay the same", () => {
     let total = 0, worst = 0, extra = 0;
     for (let f = 0; f < pb.F; f++) {
       for (let day = 0; day < pb.D; day++) {
@@ -109,12 +109,12 @@ describe("disruptions on the sample", () => {
   });
 
   it("impossible blocks fail with a reason and change nothing", () => {
-    // CSM-A has 28 classes; blocking 2 whole days leaves 24 periods
-    const s = pb.sections.indexOf("CSM-A");
+    // CSE-A has 26 classes; blocking 2 whole days leaves 24 periods
+    const s = pb.sections.indexOf("CSE-A");
     const list: Disruption[] = [0, 1].map((day) => ({ kind: "section" as const, who: s, day, periods: [] }));
     const r = reschedule(pb, base, list);
     expect(r.ok).toBe(false);
-    if (!r.ok) expect(r.reason).toMatch(/CSM-A has 28 classes a week, but only 24 periods stay open/);
+    if (!r.ok) expect(r.reason).toMatch(/CSE-A has 26 classes a week, but only 24 periods stay open/);
   });
 });
 
