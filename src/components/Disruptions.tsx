@@ -84,8 +84,8 @@ export function DisruptionBar({ sol, current, history, onApply, onUndo, onClear 
     <div className="disrupt">
       <div className="disrupt-row">
         <p className="disrupt-lede">
-          <b>Then the week happens.</b> A teacher calls in sick, a room floods, a section goes on a trip. We move only the
-          classes that have to move.
+          <b>Try it.</b> Block a teacher, a room or a section for a day or for chosen periods. Pick a teacher marks
+          someone out on their busiest day.
         </p>
         <div className="disrupt-actions">
           <div className="pop-anchor" ref={popRef}>
@@ -242,38 +242,45 @@ export function ChangesPanel({ sol, applied, totalMoved }: { sol: Solution; appl
       </h3>
       <dl className="change-stats">
         <div>
+          <dt>Affected</dt>
+          <dd>
+            <b className="num">{r.hit}</b>
+            <span>in a blocked period</span>
+          </dd>
+        </div>
+        <div>
           <dt>Moved</dt>
           <dd>
             <b className="num">{r.moves.length}</b>
-            <span>{r.hit} hit directly{r.chained ? `, ${r.chained} shifted to make space` : ""}</span>
+            <span>{r.chained ? `${r.chained} shifted by ejection chains` : "no chains needed"}{r.roomSwaps.length ? `, ${r.roomSwaps.length} room-only` : ""}</span>
+          </dd>
+        </div>
+        <div>
+          <dt>Untouched</dt>
+          <dd>
+            <b className="num">{fmt(stayed - r.roomSwaps.length)}</b>
+            <span>same period, same room</span>
           </dd>
         </div>
         <div>
           <dt>Rooms</dt>
           <dd>
             <b className="num">{r.schedule.rooms}</b>
-            <span>{r.extraRoom ? `one more than before: ${base.rooms} couldn't fit everyone` : "still, same as before"}</span>
+            <span>{r.extraRoom ? `one more than before: ${base.rooms} couldn't fit everyone` : "preserved"}</span>
           </dd>
         </div>
         <div>
-          <dt>Clashes</dt>
+          <dt>Verification</dt>
           <dd>
-            <b className="num">{r.check === null && r.respectsBlocks ? 0 : "!"}</b>
-            <span>{r.check === null && r.respectsBlocks ? "verified, blocked periods kept clear" : r.check ?? "a class sits in a blocked period"}</span>
-          </dd>
-        </div>
-        <div>
-          <dt>Room changes</dt>
-          <dd>
-            <b className="num">{r.roomSwaps.length}</b>
-            <span>same period, different room</span>
+            <b className="num">{r.check === null && r.respectsBlocks ? "✓" : "!"}</b>
+            <span>{r.check === null && r.respectsBlocks ? "verify → null; blocked periods kept clear" : r.check ?? "a class sits in a blocked period"}</span>
           </dd>
         </div>
         <div>
           <dt>Solved in</dt>
           <dd>
             <b className="num">{r.ms < 10 ? r.ms.toFixed(1) : Math.round(r.ms)}</b>
-            <span>ms, no re-solve{totalMoved !== r.moves.length ? `; ${totalMoved} moved this week in total` : ""}</span>
+            <span>ms, no re-solve{totalMoved !== r.moves.length ? `; ${totalMoved} moved this week` : ""}</span>
           </dd>
         </div>
       </dl>

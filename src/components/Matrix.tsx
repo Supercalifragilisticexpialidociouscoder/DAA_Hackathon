@@ -37,13 +37,14 @@ interface Geo {
   y: (r: number) => number;
 }
 
-function geometry(pb: Problem, avail: number): Geo {
+function geometry(pb: Problem, avail: number, rows: number): Geo {
   const narrow = avail < 640;
   const plate = narrow ? 40 : 48;
-  const gutter = narrow ? 64 : 84;
+  const gutter = narrow ? 76 : 104;
   const dayGap = narrow ? 6 : 8;
   const head = 26;
-  const rowH = narrow ? 22 : 26;
+  // many rooms: shorter rows, so the whole board (and the floor line) fits on one screen
+  const rowH = Math.max(16, Math.min(narrow ? 22 : 26, Math.floor(440 / Math.max(1, rows))));
   const cellW = Math.max(12, Math.min(34, Math.floor((avail - plate - gutter - (pb.D - 1) * dayGap) / pb.T)));
   const width = plate + pb.T * cellW + (pb.D - 1) * dayGap + gutter;
   return {
@@ -85,7 +86,7 @@ const Blocks = memo(function Blocks({ pb, schedule, geo, anim, highlight }: {
 export function Matrix({ sol, schedule, rows, maxRows, anim, highlight, ghosts, closed, dim, label }: Props) {
   const { pb, codes } = sol;
   const [wrapRef, avail] = useWidth<HTMLDivElement>();
-  const geo = useMemo(() => geometry(pb, avail || 900), [pb, avail]);
+  const geo = useMemo(() => geometry(pb, avail || 900, maxRows), [pb, avail, maxRows]);
   const boxRef = useRef<HTMLDivElement>(null);
   const [hover, setHover] = useState<{ t: number; r: number; x: number; y: number } | null>(null);
   const [cursor, setCursor] = useState<{ t: number; r: number } | null>(null);
@@ -202,7 +203,10 @@ export function Matrix({ sol, schedule, rows, maxRows, anim, highlight, ghosts, 
           ))}
           {Array.from({ length: maxRows }, (_, r) => (
             <div key={r} className={r < rows ? "mrow" : "mrow gone"} aria-hidden>
-              <div className="plate" style={{ top: geo.y(r) + 3, height: geo.rowH - 6, width: geo.plate - 10 }}>
+              <div
+                className="plate"
+                style={{ top: geo.y(r) + 3, height: geo.rowH - 6, width: geo.plate - 10, fontSize: Math.min(14, geo.rowH - 6) }}
+              >
                 {roomName(r)}
               </div>
               {Array.from({ length: pb.D }, (_, d) => (

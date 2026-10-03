@@ -33,9 +33,10 @@ function compare(courses: unknown[], D: number, P: number) {
 }
 
 describe("engine parity with reference/engine.js", () => {
-  it("sample: identical schedules, 9 → 8 → 8 → 7 rooms, floor 7", () => {
-    const s = Data.sample();
-    expect(s).toEqual(RefData.sample());
+  // The app's sample is now the university-wide dataset (tests/sample.test.ts); the
+  // original sample still lives in reference/data.js and keeps checking the engine.
+  it("original sample (reference/data.js): identical schedules, 9 → 8 → 8 → 7 rooms, floor 7", () => {
+    const s = RefData.sample();
     compare(s.courses, s.D, s.P);
     const pb = Engine.prepare(s.courses, s.D, s.P);
     const out = Engine.solveAll(pb, 7);
@@ -44,6 +45,11 @@ describe("engine parity with reference/engine.js", () => {
     expect(pb.lb).toBe(7);
     expect(pb.n).toBe(245);
     expect(pb.T).toBe(36);
+  });
+
+  it("university sample: identical schedules on both engines", () => {
+    const s = Data.sample();
+    compare(s.courses, s.D, s.P);
   });
 
   const grid = [

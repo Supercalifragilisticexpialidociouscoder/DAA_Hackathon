@@ -408,4 +408,10 @@ export const Engine = { prepare, solveAll, verify, mulberry32 };
 
 /* State primitives, exported so disruption handling (disrupt.ts) can edit a
  * finished schedule with the same feasibility rules instead of re-solving. */
-export const internals = { makeState, feasible, repeats, place, unplace, maxLoad, countRepeats };
+export const internals = {
+  makeState, feasible, repeats, place, unplace, maxLoad, countRepeats,
+  // the pipeline's own stages, exported unchanged so the site can run them with
+  // their built-in event logs (solveAll passes null) and show what they did
+  chooseMinLoad, repair, polish, assignRooms,
+};
+export type { LogEntry };

@@ -8,10 +8,10 @@ import type { SolveOutcome } from "../lib/solution";
 type Tab = "sample" | "random" | "csv";
 
 const CSV_EXAMPLE = `section,subject,faculty,hours
-CSE-A,Design & Analysis of Algorithms,Dr. K. Srinivas Rao,5
-CSE-A,Operating Systems,Mr. B. Ravi Kumar,5
-CSE-B,Design & Analysis of Algorithms,Dr. K. Srinivas Rao,5
-CSE-B,Operating Systems,Ms. G. Sravani,5`;
+CSE-A,Probability and Statistics,Dr. Ananya Rao,5
+CSE-A,Design and Analysis of Algorithms,Dr. Nandini Rao,5
+CSE-B,Probability and Statistics,Dr. Ananya Rao,5
+CSE-B,Design and Analysis of Algorithms,Dr. Lakshmi Iyer,5`;
 
 function Slider({ label, value, min, max, onChange, hint }: {
   label: string; value: number; min: number; max: number; onChange: (v: number) => void; hint?: string;
@@ -125,8 +125,10 @@ export function DataDialog({ open, onClose, onApply }: {
           {tab === "sample" && (
             <>
               <p>
-                A III-year B.Tech block: CSE, CSM and ECE, {plural(9, "section")}, 23 teachers, 245 classes over 6 days × 6
-                periods. Faculty names are illustrative.
+                One semester across the university. CSE (A to F, plus G and H taught together), CSE-DS (A to F) and CSM
+                (A to H) take the same six subjects (P&amp;S, DE, DAA, BWD, ACS, LRAS); ECE (A to C), IoT/R&amp;AI and BBA
+                (A, B) have their own. Teachers are shared across sections and some across departments. Faculty names are
+                fictional.
               </p>
               <Preview ds={sample} />
             </>
